@@ -6,18 +6,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+/**
+ * Created by Kevin on 2015/10/23.
+ */
+public class NewContact extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
-        primaryStage.setTitle("Contact");
-        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setTitle("New Contact");
+        primaryStage.setScene(new Scene(root, 300, 300));
         primaryStage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-    
 }
