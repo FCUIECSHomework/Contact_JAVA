@@ -14,10 +14,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
-    @FXML
-    private ListView<String> Main_ListView_lv1;
-    @FXML
-    private Button Main_Button_newContact;
+    @FXML private ListView<String> Main_ListView_lv1;
+    @FXML private Button Main_Button_newContact;
+    @FXML private Button Main_Button_editContact;
+    @FXML private Button Main_Button_deleteContact;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -36,6 +36,14 @@ public class MainController implements Initializable {
     private void setAllEventAction() {
         Main_Button_newContact.setOnAction(event -> {
             createNewWindow("NewContact");
+        });
+
+        Main_Button_editContact.setOnAction(event -> {
+//            createNewWindow("EditContact");
+        });
+
+        Main_Button_deleteContact.setOnAction(event -> {
+//            createNewWindow("DeleteContact");
         });
     }
 
