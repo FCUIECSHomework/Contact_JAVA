@@ -2,26 +2,41 @@ package sample;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainController extends Controller implements Initializable {
-    @FXML private ListView<UserObject> Main_ListView_lv1;
-    @FXML private Button Main_Button_newContact;
-    @FXML private Button Main_Button_editContact;
-    @FXML private Button Main_Button_deleteContact;
 
-//    private List<UserObject> listOfUserObject;
+    @FXML
+    private ListView<UserObject> Main_ListView_lv1;
+    @FXML
+    private Button Main_Button_newContact;
+    @FXML
+    private Button Main_Button_editContact;
+    @FXML
+    private Button Main_Button_deleteContact;
+
+    private javafx.scene.control.Dialog newContactDialog;
+    private javafx.scene.control.Dialog editContactDialog;
+
     private ObservableList<UserObject> listViewUserItems;
     private JsonContact contact1 = new JsonContact();
 
@@ -29,22 +44,20 @@ public class MainController extends Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setAllEventAction();
         setUpListView();
-
-//        ObservableList<UserObject> myObservableList = FXCollections.observableList(listOfUserObject);
-//        Main_ListView_lv1.setItems(myObservableList);
+        updateListView();
     }
 
     private void setAllEventAction() {
         Main_Button_newContact.setOnAction(event -> {
-            createNewWindow("NewContact", "New Contact");
+            createNewContact();
         });
 
         Main_Button_editContact.setOnAction(event -> {
-//            createNewWindow("NewContact", "Edit Contact");
+            editContact();
         });
 
         Main_Button_deleteContact.setOnAction(event -> {
-//            createNewWindow("DeleteContact", "Delete");
+            deleteContact();
         });
     }
 
@@ -54,21 +67,129 @@ public class MainController extends Controller implements Initializable {
     }
 
     public void updateListView() {
-        UserObject[] tempUser = contact1.getAllContact();
         listViewUserItems.clear();
+        UserObject[] tempUser = contact1.getAllContact();
         for (UserObject user : tempUser) {
             listViewUserItems.add(user);
         }
-
     }
 
-    private void createNewWindow(String fxmlName, String title) {
-        NewWindow tempWindow = new NewWindow(fxmlName);
-        tempWindow.setTitle(title);
+    private void createNewContact() {
+        createNewContactWindowAndSetCallBack();
+        newContactDialog.showAndWait();
+        updateListView();
     }
 
-    public JsonContact getContact() {
-        return this.contact1;
+    private void createNewContactWindowAndSetCallBack() {
+        newContactDialog = new Dialog();
+        newContactDialog.setTitle("New Contact");
+        newContactDialog.setHeaderText("Please Enter data of your new contact.");
+        newContactDialog.setResizable(true);
+        newContactDialog.setResizable(false);
+
+        Label label1 = new Label("Name: ");
+        Label label2 = new Label("Line: ");
+        Label label3 = new Label("Email: ");
+        Label label4 = new Label("Phone: ");
+        TextField text1 = new TextField();
+        TextField text2 = new TextField();
+        TextField text3 = new TextField();
+        TextField text4 = new TextField();
+
+        GridPane grid = new GridPane();
+        grid.add(label1, 1, 1);
+        grid.add(text1, 2, 1);
+        grid.add(label2, 1, 2);
+        grid.add(text2, 2, 2);
+        grid.add(label3, 1, 3);
+        grid.add(text3, 2, 3);
+        grid.add(label4, 1, 4);
+        grid.add(text4, 2, 4);
+        newContactDialog.getDialogPane().setContent(grid);
+
+        ButtonType buttonTypeOk = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+        newContactDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+        newContactDialog.setResultConverter(new Callback<ButtonType, String>() {
+            @Override
+            public String call(ButtonType b) {
+                if (b == buttonTypeOk) {
+                    registerContact(text1.getText(), text2.getText(), text3.getText(), text4.getText());
+                    return "SUCCESS";
+                }
+                return "FAILED";
+            }
+        });
     }
 
+    private void registerContact(String name, String line, String email, String telephone) {
+        String temp[] = new String[1];
+        temp[0] = telephone;
+        contact1.registerContact(name, line, email, temp);
+    }
+
+    private void editContact() {
+        editContactAndSetCallBack();
+        editContactDialog.showAndWait();
+        updateListView();
+    }
+
+    private void editContactAndSetCallBack() {
+        UserObject targetUser = Main_ListView_lv1.getSelectionModel().getSelectedItem();
+        editContactDialog = new Dialog();
+        editContactDialog.setTitle("Edit Contact");
+        editContactDialog.setHeaderText("Please Enter new data of your contact.");
+        editContactDialog.setResizable(true);
+        editContactDialog.setResizable(false);
+
+        Label label1 = new Label("Name: ");
+        Label label2 = new Label("Line: ");
+        Label label3 = new Label("Email: ");
+        Label label4 = new Label("Phone: ");
+        TextField text1 = new TextField();
+        TextField text2 = new TextField();
+        TextField text3 = new TextField();
+        TextField text4 = new TextField();
+
+        GridPane grid = new GridPane();
+        grid.add(label1, 1, 1);
+        grid.add(text1, 2, 1);
+        grid.add(label2, 1, 2);
+        grid.add(text2, 2, 2);
+        grid.add(label3, 1, 3);
+        grid.add(text3, 2, 3);
+        grid.add(label4, 1, 4);
+        grid.add(text4, 2, 4);
+
+        text1.setText(targetUser.getName());
+        text2.setText(targetUser.getLine());
+        text3.setText(targetUser.getEmail());
+        text4.setText(targetUser.getTelephone().get(0));
+
+        editContactDialog.getDialogPane().setContent(grid);
+
+        ButtonType buttonTypeOk = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+        editContactDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+        editContactDialog.setResultConverter(new Callback<ButtonType, String>() {
+            @Override
+            public String call(ButtonType b) {
+                if (b == buttonTypeOk) {
+                    editAndSaveContact(targetUser.getUuid(), text1.getText(), text2.getText(), text3.getText(), text4.getText());
+                    return "SUCCESS";
+                }
+                return "FAILED";
+            }
+        });
+    }
+
+    private void editAndSaveContact(String uuid, String name, String line, String email, String telephone) {
+        String temp[] = new String[1];
+        temp[0] = telephone;
+        contact1.editContact(uuid, name, line, email, temp);
+    }
+
+    private void deleteContact() {
+        String targetID = Main_ListView_lv1.getSelectionModel().getSelectedItem().getUuid();
+        contact1.removeContact(targetID);
+        updateListView();
+    }
 }
