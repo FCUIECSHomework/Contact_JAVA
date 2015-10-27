@@ -8,17 +8,19 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<SplitPane dividerPositions="0.75" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MainController">
+<SplitPane dividerPositions="0.9" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MainController">
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
             <ListView fx:id="Main_ListView_lv1" layoutX="123.0" layoutY="99.0" prefHeight="398.0" prefWidth="446.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children></AnchorPane>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="138.0">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="106.0" SplitPane.resizableWithParent="false">
          <children>
-            <Button fx:id="Main_Button_newContact" layoutX="46.0" layoutY="75.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="146.0" text="New" AnchorPane.bottomAnchor="298.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <Button fx:id="Main_Button_editContact" layoutY="149.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="146.0" text="Edit" />
-            <Button fx:id="Main_Button_deleteContact" layoutY="298.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="146.0" text="Delete" />
+            <Button fx:id="Main_Button_newContact" layoutX="-7.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="72.0" text="New" />
+            <Button fx:id="Main_Button_editContact" layoutX="-7.0" layoutY="60.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="72.0" text="View/Edit" />
+            <Button fx:id="Main_Button_deleteContact" layoutX="-7.0" layoutY="120.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="72.0" text="Del" />
+            <Button fx:id="Main_Button_SortLine" layoutX="-4.0" layoutY="218.0" mnemonicParsing="false" text="Sort Line" />
+            <Button fx:id="Main_Button_SortUID" layoutX="-3.0" layoutY="188.0" mnemonicParsing="false" text="Sort UID" />
          </children></AnchorPane>
   </items>
 </SplitPane>

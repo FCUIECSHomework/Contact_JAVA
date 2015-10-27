@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_contact_java" default="compile.module.contact_java">
+  <dirname property="module.contact_java.basedir" file="${ant.file.module_contact_java}"/>
+  
+  <property name="module.jdk.home.contact_java" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.contact_java" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.contact_java" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.contact_java" value="-encoding x-windows-950 -source 8 ${compiler.args}"/>
+  
+  <property name="contact_java.output.dir" value="${module.contact_java.basedir}/out/production/Contact_JAVA"/>
+  <property name="contact_java.testoutput.dir" value="${module.contact_java.basedir}/out/test/Contact_JAVA"/>
+  
+  <path id="contact_java.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="contact_java.module.production.classpath">
+    <path refid="${module.jdk.classpath.contact_java}"/>
+    <pathelement location="C:/Program Files/Java/jdk1.8.0_51/jre/lib/ext/json_simple-1.1.jar"/>
+  </path>
+  
+  <path id="contact_java.runtime.production.module.classpath">
+    <pathelement location="${contact_java.output.dir}"/>
+    <pathelement location="C:/Program Files/Java/jdk1.8.0_51/jre/lib/ext/json_simple-1.1.jar"/>
+  </path>
+  
+  <path id="contact_java.module.classpath">
+    <path refid="${module.jdk.classpath.contact_java}"/>
+    <pathelement location="${contact_java.output.dir}"/>
+    <pathelement location="C:/Program Files/Java/jdk1.8.0_51/jre/lib/ext/json_simple-1.1.jar"/>
+  </path>
+  
+  <path id="contact_java.runtime.module.classpath">
+    <pathelement location="${contact_java.testoutput.dir}"/>
+    <pathelement location="${contact_java.output.dir}"/>
+    <pathelement location="C:/Program Files/Java/jdk1.8.0_51/jre/lib/ext/json_simple-1.1.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.contact_java">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.contact_java">
+    <patternset refid="excluded.from.module.contact_java"/>
+  </patternset>
+  
+  <path id="contact_java.module.sourcepath">
+    <dirset dir="${module.contact_java.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.contact_java" depends="compile.module.contact_java.production,compile.module.contact_java.tests" description="Compile module Contact_JAVA"/>
+  
+  <target name="compile.module.contact_java.production" depends="register.custom.compilers" description="Compile module Contact_JAVA; production classes">
+    <mkdir dir="${contact_java.output.dir}"/>
+    <javac2 destdir="${contact_java.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.contact_java}/javac">
+      <compilerarg line="${compiler.args.contact_java}"/>
+      <bootclasspath refid="contact_java.module.bootclasspath"/>
+      <classpath refid="contact_java.module.production.classpath"/>
+      <src refid="contact_java.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.contact_java"/>
+    </javac2>
+    
+    <copy todir="${contact_java.output.dir}">
+      <fileset dir="${module.contact_java.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.contact_java.tests" depends="register.custom.compilers,compile.module.contact_java.production" description="compile module Contact_JAVA; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.contact_java" description="cleanup module">
+    <delete dir="${contact_java.output.dir}"/>
+    <delete dir="${contact_java.testoutput.dir}"/>
+  </target>
+</project>

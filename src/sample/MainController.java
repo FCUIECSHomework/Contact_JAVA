@@ -1,13 +1,8 @@
 package sample;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
@@ -16,14 +11,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.net.URL;
-import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class MainController extends Controller implements Initializable {
+public class MainController implements Initializable {
 
     @FXML
     private ListView<UserObject> Main_ListView_lv1;
@@ -33,6 +24,10 @@ public class MainController extends Controller implements Initializable {
     private Button Main_Button_editContact;
     @FXML
     private Button Main_Button_deleteContact;
+    @FXML
+    private Button Main_Button_SortUID;
+    @FXML
+    private Button Main_Button_SortLine;
 
     private javafx.scene.control.Dialog newContactDialog;
     private javafx.scene.control.Dialog editContactDialog;
@@ -44,7 +39,7 @@ public class MainController extends Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setAllEventAction();
         setUpListView();
-        updateListView();
+        sortWithUuidAndUpdateListView();
     }
 
     private void setAllEventAction() {
@@ -59,11 +54,29 @@ public class MainController extends Controller implements Initializable {
         Main_Button_deleteContact.setOnAction(event -> {
             deleteContact();
         });
+
+        Main_Button_SortUID.setOnAction(event -> {
+            sortWithUuidAndUpdateListView();
+        });
+
+        Main_Button_SortLine.setOnAction(event -> {
+            sortWithLineAndUpdateListView();
+        });
     }
 
     private void setUpListView() {
         Main_ListView_lv1.setFixedCellSize(50);
         listViewUserItems = Main_ListView_lv1.getItems();
+    }
+
+    public void sortWithLineAndUpdateListView() {
+        updateListView();
+        listViewUserItems.sort(new UserObjectComparatorWithLine());
+    }
+
+    public void sortWithUuidAndUpdateListView() {
+        updateListView();
+        listViewUserItems.sort(new UserObjectComparator());
     }
 
     public void updateListView() {
@@ -77,7 +90,7 @@ public class MainController extends Controller implements Initializable {
     private void createNewContact() {
         createNewContactWindowAndSetCallBack();
         newContactDialog.showAndWait();
-        updateListView();
+        sortWithUuidAndUpdateListView();
     }
 
     private void createNewContactWindowAndSetCallBack() {
@@ -130,7 +143,7 @@ public class MainController extends Controller implements Initializable {
     private void editContact() {
         editContactAndSetCallBack();
         editContactDialog.showAndWait();
-        updateListView();
+        sortWithUuidAndUpdateListView();
     }
 
     private void editContactAndSetCallBack() {
@@ -190,6 +203,6 @@ public class MainController extends Controller implements Initializable {
     private void deleteContact() {
         String targetID = Main_ListView_lv1.getSelectionModel().getSelectedItem().getUuid();
         contact1.removeContact(targetID);
-        updateListView();
+        sortWithUuidAndUpdateListView();
     }
 }
